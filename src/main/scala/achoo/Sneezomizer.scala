@@ -68,6 +68,9 @@ object Sneezomizer extends JSApp {
     resetTimer()
   }
 
+  /**
+   * Handle a sneeze event.
+   */
   @JSExport
   def sneeze(): Unit = {
     val now = System.currentTimeMillis()
@@ -77,6 +80,10 @@ object Sneezomizer extends JSApp {
     commitSneeze(now)
   }
 
+  /**
+   * Add an entry to the sneequence.
+   * @param text what happen?
+   */
   def sneeq(text: String): Unit = {
     val li = document.createElement("li")
     li.innerHTML = text
