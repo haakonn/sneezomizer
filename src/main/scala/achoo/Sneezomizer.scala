@@ -39,7 +39,7 @@ object Sneezomizer extends JSApp {
     if (isPrime(count))
       sneeq(s"You sneezed a prime number! ʘ‿ʘ")
     else
-      sneeq(s"You did not sneeze a prime number. ಠ_ಠ")
+      sneeq("You did not sneeze a prime number. ಠ_ಠ")
     count = 0
     last = 0
   }
