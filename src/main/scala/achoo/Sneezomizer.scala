@@ -1,5 +1,7 @@
 package achoo
 
+import achoo.interests.{Prime, Fibonacci}
+
 import scala.scalajs.js.JSApp
 import org.scalajs.dom
 import dom.document
@@ -12,37 +14,37 @@ import scala.scalajs.js.annotation.JSExport
  */
 object Sneezomizer extends JSApp {
 
+  /**
+   * These are the assessments the sneeze number will be subjected to.
+   */
+  val assessments = Set(Prime, Fibonacci)
+
   var count = 0
   var last = 0l
   val cutoffSeconds = 10
 
   var timerHandle = 0
-
   lazy val sneequence = document.getElementById("sneequence")
 
   def main(): Unit = {
   }
 
   /**
-   * Adapted from http://www.scala-lang.org/old/node/47.html
+   * The emotion-based elements of a reaction string.
+   * @param emoticon a face
+   * @param punctuation Multiple exclamation marks!!! An ellipsis … An interrobang‽
    */
-  def isPrime(n: Int) = {
-    def divisors(n: Int): List[Int] = for (i <- List.range(1, n + 1) if n % i == 0) yield i
-    divisors(n).length == 2
+  case class Reaction(emoticon: String, punctuation: String = ".") {
+    override def toString = s"$punctuation $emoticon"
   }
 
   /**
-   * Adapted from thin air
+   * Produce a Reaction to a given amount of notable sneeze numbers.
    */
-  def isFibonacci(n: Int) = {
-    var a = 0
-    var b = 1
-    while(b < n) {
-      var c = a + b
-      a = b
-      b = c
-    }
-    n == b
+  def react(notables: Int) = notables match {
+    case 0 => Reaction("ಠ_ಠ")
+    case 1 => Reaction("ʘ_ʘ")
+    case _ => Reaction("ʘ‿ʘ", "!")
   }
 
   /**
@@ -50,22 +52,15 @@ object Sneezomizer extends JSApp {
    */
   def conclude() = {
     sneeq(s"The sneezing sequence (Sneequence™) expired.")
-
-    var notability = ""
-    var reaction = ". ಠ_ಠ"
-    if (isFibonacci(count)) {
-      notability += " fibonacci"
-      reaction = ". ʘ_ʘ"
-    }
-    if (isPrime(count)) {
-      notability = " prime" + notability
-      reaction = "! ʘ‿ʘ"
-    }
-
-    if (notability != "")
-      sneeq(s"You sneezed a" + notability + " number" + reaction)
-    else
-      sneeq("You did not sneeze an interesting number" + reaction)
+    val notabilities = assessments.map(_(count)).flatten
+    val reaction = react(notabilities.size)
+    val notabilityStr = notabilities.mkString(" ")
+    val conclusion =
+      if (notabilities.size > 0)
+        s"You sneezed a $notabilityStr number$reaction"
+      else
+        s"You did not sneeze an interesting number$reaction"
+    sneeq(conclusion)
 
     count = 0
     last = 0
@@ -86,7 +81,7 @@ object Sneezomizer extends JSApp {
 
   /**
    * The sneeze is good.
-   * @param when
+   * @param when millisecond-timestamp of sneeze
    */
   def commitSneeze(when: Long) = {
     last = when
@@ -101,9 +96,7 @@ object Sneezomizer extends JSApp {
   @JSExport
   def sneeze(): Unit = {
     val now = System.currentTimeMillis()
-    if (last == 0) {
-      sneequence.innerHTML = ""
-    }
+    if (last == 0) sneequence.innerHTML = ""
     commitSneeze(now)
   }
 
