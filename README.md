@@ -5,6 +5,9 @@ Have you been plagued by the suspicion that you always sneeze a prime number of 
 in each sequence? Sneezomizer can help you finally determine if you have this rare
 superpower.
 
+If you don't have that particular superpower, Sneezomizer will also help you determine
+whether you can at *least* sneeze fibonacci numbers.
+
 Sneezomizer is a JavaScript application written in Scala with [ScalaJS](http://www.scala-js.org/).
 There's a demo [here](https://haakonn.github.io/sneezomizer/).
 

@@ -32,14 +32,41 @@ object Sneezomizer extends JSApp {
   }
 
   /**
+   * Adapted from thin air
+   */
+  def isFibonacci(n: Int) = {
+    var a = 0
+    var b = 1
+    while(b < n) {
+      var c = a + b
+      a = b
+      b = c
+    }
+    n == b
+  }
+
+  /**
    * The sneequence is over, evidence has been gathered, so we can conclude.
    */
   def conclude() = {
     sneeq(s"The sneezing sequence (Sneequence™) expired.")
-    if (isPrime(count))
-      sneeq(s"You sneezed a prime number! ʘ‿ʘ")
+
+    var notability = ""
+    var reaction = ". ಠ_ಠ"
+    if (isFibonacci(count)) {
+      notability += " fibonacci"
+      reaction = ". ʘ_ʘ"
+    }
+    if (isPrime(count)) {
+      notability = " prime" + notability
+      reaction = "! ʘ‿ʘ"
+    }
+
+    if (notability != "")
+      sneeq(s"You sneezed a" + notability + " number" + reaction)
     else
-      sneeq("You did not sneeze a prime number. ಠ_ಠ")
+      sneeq("You did not sneeze an interesting number" + reaction)
+
     count = 0
     last = 0
   }
