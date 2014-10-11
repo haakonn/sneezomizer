@@ -9,18 +9,9 @@ object Fibonacci extends Assessment {
 
   override val notability = "fibonacci"
 
-  /**
-   * Adapted from thin air
-   */
-  override def matches(n: Int) = {
-    var a = 0
-    var b = 1
-    while(b < n) {
-      val c = a + b
-      a = b
-      b = c
-    }
-    n == b
-  }
+  /* From http://stackoverflow.com/a/9867004/40066 */
+  val fibs: Stream[Int] = 0 #:: fibs.scanLeft(1)(_ + _)
+
+  override def matches(n: Int) = fibs.takeWhile(_ <= n).last == n
 
 }
