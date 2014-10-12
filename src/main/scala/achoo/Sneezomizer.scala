@@ -71,13 +71,16 @@ object Sneezomizer extends JSApp {
     timerHandle = dom.window.setTimeout(() => { conclude() }, cutoffSeconds * 1000)
   }
 
+  def times(count: Int) = count match {
+    case 1 => "once"
+    case 2 => "twice"
+    case _ => s"$count times"
+  }
+
   /**
    * Tell the sneezer he dun good.
    */
-  def informCount() = {
-    val times = "time" + (if (count > 1) "s" else "")
-    sneeq(s"You have sneezed $count $times!")
-  }
+  def informCount() = sneeq(s"You have sneezed ${times(count)}!")
 
   /**
    * The sneeze is good.
