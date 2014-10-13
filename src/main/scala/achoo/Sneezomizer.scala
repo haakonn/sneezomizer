@@ -54,11 +54,11 @@ object Sneezomizer extends JSApp {
     sneeq(s"The sneezing sequence (Sneequence™) expired.")
     val notabilities = assessments.map(_(count)).flatten
     val reaction = react(notabilities.size)
-    val notabilityStr = notabilities.mkString(" ")
     val conclusion =
-      if (notabilities.size > 0)
+      if (notabilities.size > 0) {
+        val notabilityStr = notabilities.mkString(" ")
         s"You sneezed a $notabilityStr number$reaction"
-      else
+      } else
         s"You did not sneeze an interesting number$reaction"
     sneeq(conclusion)
 
