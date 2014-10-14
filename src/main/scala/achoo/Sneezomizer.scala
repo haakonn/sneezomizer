@@ -9,6 +9,16 @@ import dom.document
 import scala.scalajs.js.annotation.JSExport
 
 /**
+ * Encapsulate state.
+ * @param count the number of sneezes so far
+ * @param lastTimestamp timestamp of last sneeze in millisecond-epoch
+ */
+case class State(count: Int, lastTimestamp: Long) {
+  def add(ts: Long) = State(count + 1, ts)
+  def isStart = lastTimestamp == 0
+}
+
+/**
  * Helps you determine whether you have the rare gift of sneezing a prime
  * number of times per sequence.
  */
@@ -19,8 +29,9 @@ object Sneezomizer extends JSApp {
    */
   val assessments = Set(Prime, Fibonacci)
 
-  var count = 0
-  var last = 0l
+  val startState = State(0, 0)
+  var state = startState
+
   val cutoffSeconds = 10
 
   var timerHandle = 0
@@ -52,7 +63,7 @@ object Sneezomizer extends JSApp {
    */
   def conclude() = {
     sneeq(s"The sneezing sequence (Sneequence™) expired.")
-    val notabilities = assessments.map(_(count)).flatten
+    val notabilities = assessments.map(_(state.count)).flatten
     val reaction = react(notabilities.size)
     val conclusion =
       if (notabilities.size > 0) {
@@ -61,9 +72,7 @@ object Sneezomizer extends JSApp {
       } else
         s"You did not sneeze an interesting number$reaction"
     sneeq(conclusion)
-
-    count = 0
-    last = 0
+    state = startState
   }
 
   def resetTimer() = {
@@ -80,15 +89,14 @@ object Sneezomizer extends JSApp {
   /**
    * Tell the sneezer he dun good.
    */
-  def informCount() = sneeq(s"You have sneezed ${times(count)}!")
+  def informCount() = sneeq(s"You have sneezed ${times(state.count)}!")
 
   /**
    * The sneeze is good.
    * @param when millisecond-timestamp of sneeze
    */
   def commitSneeze(when: Long) = {
-    last = when
-    count += 1
+    state = state.add(when)
     informCount()
     resetTimer()
   }
@@ -99,7 +107,7 @@ object Sneezomizer extends JSApp {
   @JSExport
   def sneeze(): Unit = {
     val now = System.currentTimeMillis()
-    if (last == 0) sneequence.innerHTML = ""
+    if (state.isStart) sneequence.innerHTML = ""
     commitSneeze(now)
   }
 
