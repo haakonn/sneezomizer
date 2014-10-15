@@ -10,12 +10,12 @@ import scala.scalajs.js.annotation.JSExport
 
 /**
  * Encapsulate state.
- * @param count the number of sneezes so far
- * @param lastTimestamp timestamp of last sneeze in millisecond-epoch
+ * @param timestamps timestamps of the sneezes in millisecond-epochs (newest first)
  */
-case class State(count: Int, lastTimestamp: Long) {
-  def add(ts: Long) = State(count + 1, ts)
-  def isStart = lastTimestamp == 0
+case class State(timestamps: List[Long]) {
+  def add(ts: Long) = State(ts :: timestamps)
+  val count = timestamps.size
+  def isStart = timestamps.isEmpty
 }
 
 /**
@@ -29,7 +29,7 @@ object Sneezomizer extends JSApp {
    */
   val assessments = Set(Prime, Fibonacci)
 
-  val startState = State(0, 0)
+  val startState = State(List.empty)
   var state = startState
 
   val cutoffSeconds = 10
