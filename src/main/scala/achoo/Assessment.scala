@@ -2,6 +2,6 @@ package achoo
 
 trait Assessment {
   val notability: String
-  def matches(sneezeCount: Int): Boolean
-  def apply(sneezeCount: Int) = if (matches(sneezeCount)) Some(notability) else None
+  def matches(state: State): Boolean
+  def apply(state: State) = if (matches(state)) Some(notability) else None
 }

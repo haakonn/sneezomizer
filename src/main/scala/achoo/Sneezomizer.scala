@@ -63,7 +63,7 @@ object Sneezomizer extends JSApp {
    */
   def conclude() = {
     sneeq(s"The sneezing sequence (Sneequence™) expired.")
-    val notabilities = assessments.map(_(state.count)).flatten
+    val notabilities = assessments.map(_(state)).flatten
     val reaction = react(notabilities.size)
     val conclusion =
       if (notabilities.size > 0) {
