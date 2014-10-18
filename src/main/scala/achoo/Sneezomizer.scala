@@ -1,6 +1,6 @@
 package achoo
 
-import achoo.interests.{Prime, Fibonacci}
+import achoo.assessments.{Prime, Fibonacci}
 
 import scala.scalajs.js.JSApp
 import org.scalajs.dom

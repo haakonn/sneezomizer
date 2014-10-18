@@ -1,4 +1,4 @@
-package achoo.interests
+package achoo.assessments
 
 import achoo.{State, Assessment}
 
