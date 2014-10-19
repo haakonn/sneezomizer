@@ -29,6 +29,8 @@ object Sneezomizer extends JSApp {
    */
   val assessments = Set(Prime, Fibonacci)
 
+  val sneezomatopoeia = Vector("Weshee", "Hachu", "Whereshe", "A-haasha", "Achoo", "Pichee", "Ochoooh")
+
   val startState = State(List.empty)
   var state = startState
 
@@ -36,9 +38,12 @@ object Sneezomizer extends JSApp {
 
   var timerHandle = 0
   lazy val sneequence = document.getElementById("sneequence")
+  lazy val button = document.getElementById("sneeze-button")
 
   def main(): Unit = {
   }
+
+  def randomSneeze = util.Random.shuffle(sneezomatopoeia).head
 
   /**
    * The emotion-based elements of a reaction string.
@@ -109,6 +114,7 @@ object Sneezomizer extends JSApp {
     val now = System.currentTimeMillis()
     if (state.isStart) sneequence.innerHTML = ""
     commitSneeze(now)
+    button.innerHTML = randomSneeze
   }
 
   /**
