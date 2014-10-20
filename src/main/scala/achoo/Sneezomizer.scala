@@ -15,7 +15,7 @@ import scala.scalajs.js.annotation.JSExport
 case class State(timestamps: List[Long]) {
   def add(ts: Long) = State(ts :: timestamps)
   val count = timestamps.size
-  def isStart = timestamps.isEmpty
+  lazy val isStart = timestamps.isEmpty
 }
 
 /**
